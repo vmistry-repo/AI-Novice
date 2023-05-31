@@ -94,12 +94,12 @@ def test(model, device, test_loader, test_acc, test_losses):
 def send_model_to_device(model, device):
   return model().to(device)
 
-def run_for_epoch(num_epochs, model, device, train_loader, test_loader, optimizer, scheduler, train_acc, train_losses):
+def run_for_epoch(num_epochs, model, device, train_loader, test_loader, optimizer, scheduler, train_acc, train_losses, test_acc, test_losses):
   for epoch in range(1, num_epochs+1):
     print(f'Epoch {epoch}')
     train(model, device, train_loader, optimizer, train_acc, train_losses)
     scheduler.step()
-    test(model, device, test_loader)
+    test(model, device, test_loader, test_acc, test_losses)
   
 def plot_dataset_images(batch_data, batch_label):
   fig = plt.figure()
@@ -123,5 +123,5 @@ def plot_loss_accuracy_graph(train_losses, train_acc, test_losses, test_acc):
   axs[1, 1].set_title("Test Accuracy")
 
 def get_model_summary(model, device, x, y):
-  model = model().to(device)
+  #model = model().to(device)
   summary(model, input_size=(1, x, y))
