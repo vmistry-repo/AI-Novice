@@ -22,7 +22,6 @@ The CNN model is defined in the _model.py_ file and uses the following architect
 
 Utility functions are defined in _utils.py_
 Description of functions is as
-- **plot_dataset_images**: A function that plots a batch of images and their corresponding labels in a 3x4 grid.
 - **plot_loss_accuracy_graph**: A function that plots the training and testing loss and accuracy curves on a 2x2 grid.
 - **get_model_summary**: A function that prints a summary of the given PyTorch model's architecture and parameters based on the specified input size.
 - **test**: A function that evaluates a trained PyTorch model on a test dataset and reports the average loss and accuracy.
@@ -32,27 +31,25 @@ Description of functions is as
                      It also updates the learning rate using a scheduler. The training and testing accuracy and loss curves are appended to the given lists of accuracy and loss.
 - **check_cuda**: A function that checks if a CUDA-enabled GPU is available on the system and returns a boolean value.
 - **get_device**: A function that returns the device (CPU or CUDA) to be used for running PyTorch code based on the availability of a CUDA-enabled GPU.
-- **get_transforms_for_train_data**: A function that returns a set of image transformations to be applied to training data, including random cropping, resizing, rotation, and normalization.
-- **get_transforms_for_test_data**: A function that returns a set of image transformations to be applied to test data, including normalization.
-- **get_loader**: A function that returns a PyTorch DataLoader object for a given dataset with the specified batch size and other parameters.
 - **GetCorrectPredCount**: A function that takes in predicted and target labels and returns the number of correct predictions.
 - **train**: A function that trains a PyTorch model on a given training dataset and reports the training loss and accuracy for each batch.
              It also appends the training accuracy and loss to the given lists of training accuracy and loss.
 
-**Note:** _s5.ipynb_ is a jupiter notebook, but not converted to JSON hence preview won't be available on Github
-
-The code from _s5.ipynb_ trains a convolutional neural network (CNN) model on the MNIST dataset using PyTorch.<br>
-The model and utils modules contain custom-defined functions for building and training the CNN model, as well as utility functions for data loading, data preprocessing, and device management.
-
-The code first sets the image size x and y, as well as the mean and standard deviation of the dataset.<br>
-It then defines the batch size and initializes empty lists to store training and testing accuracy and loss.<br>
-The device is set using the get_device function from utils, and the CNN model is initialized and sent to the device using the **send_model_to_device** function.
-
-Next, the code defines the data transforms for the training and testing datasets using the **get_transforms_for_train_data** and **get_transforms_for_test_data** functions, respectively.<br>
-The MNIST dataset is downloaded and loaded using the datasets.MNIST function from torchvision, and the data is split into batches using the get_loader function from utils.
-
-The code then defines the optimizer and learning rate scheduler for training the CNN model.<br>
-Finally, it trains the model for two epochs using the **run_for_epoch** function from utils and prints the model architecture summary using the **get_model_summary** function.
+_s5.ipynb_ is a jupiter notebook, perforing following steps
+- Imports the required PyTorch libraries and custom modules such as model, utils, optim, datasets, and transforms.
+- Defines the device (CPU or GPU) to run the model on using the utils.get_device() function.
+- Defines the image dimensions x and y, the mean and standard deviation of the dataset (mean and std), and the batch size (batch_size).
+- Defines the data transformations for the training and test datasets using the train_transforms and test_transforms Compose objects from the transforms module.
+- Loads the MNIST training and test datasets using the datasets.MNIST() function and applies the respective data transformations.
+- Defines the data loaders for the training and test datasets using the torch.utils.data.DataLoader() function.
+- Plots a sample of 12 images from the training dataset using the matplotlib.pyplot library.
+- Defines a convolutional neural network (CNN) model using the model.Net class.
+- Sends the CNN model to the device defined earlier using the utils.send_model_to_device() function.
+- Defines the optimizer and scheduler for training the CNN model using the optim.SGD() and optim.lr_scheduler.StepLR() functions.
+- Executes the training and testing loop for 10 epochs using the utils.run_for_epoch() function, which trains the model on the training data, computes the accuracy on the test data,
+  and logs the loss and accuracy for each epoch.
+- Prints the summary of the CNN model using the utils.get_model_summary() function, which displays the number of parameters and the output shape of each layer in the model.
+- Plots the loss and accuracy graphs using the utils.plot_loss_accuracy_graph() function.
 
 ## Usage
 
