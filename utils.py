@@ -3,40 +3,27 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from torchsummary import summary
-from torchvision import transforms
+from torchvision.transforms import ToTensor
+
+# Data to plot accuracy and loss graphs
+train_losses = []
+test_losses = []
+train_acc = []
+test_acc = []
+test_incorrect_pred = {'images': [], 'ground_truths': [], 'predicted_vals': []}
 
 def check_cuda():
   cuda_available = torch.cuda.is_available()
-  print("CUDA Available?", cuda_available)
+  print("CUDA Available: ", cuda_available)
   return cuda_available
 
 def get_device():
   device = torch.device("cuda" if check_cuda() else "cpu")
 
-def get_transforms_for_train_data(x, y, mean, std):
-  return transforms.Compose([
-    # Instead of 22 it would be random later on
-    transforms.RandomApply([transforms.CenterCrop(22), ], p=0.1),
-    transforms.Resize((x,  y)),
-    transforms.RandomRotation((-15., 15.), fill=0),
-    transforms.ToTensor(),
-    transforms.Normalize((mean,), (std,)),
-    ])
-
-def get_transforms_for_test_data(mean, std):
-  return transforms.Compose([
-    transforms.ToTensor(),
-    transforms.Normalize((mean,), (std,))
-    ])
-
-def get_loader(data, batch_size):
-  kwargs = {'batch_size': batch_size, 'shuffle': True, 'num_workers': 2, 'pin_memory': False}
-  return torch.utils.data.DataLoader(data, **kwargs)
-
 def GetCorrectPredCount(pPrediction, pLabels):
   return pPrediction.argmax(dim=1).eq(pLabels).sum().item()
 
-def train(model, device, train_loader, optimizer, train_acc, train_losses):
+def train(model, device, train_loader, optimizer):
   model.train()
   pbar = tqdm(train_loader)
 
@@ -67,7 +54,7 @@ def train(model, device, train_loader, optimizer, train_acc, train_losses):
   train_acc.append(100*correct/processed)
   train_losses.append(train_loss/len(train_loader))
 
-def test(model, device, test_loader, test_acc, test_losses):
+def test(model, device, test_loader):
     model.eval()
 
     test_loss = 0
@@ -94,24 +81,14 @@ def test(model, device, test_loader, test_acc, test_losses):
 def send_model_to_device(model, device):
   return model().to(device)
 
-def run_for_epoch(num_epochs, model, device, train_loader, test_loader, optimizer, scheduler, train_acc, train_losses, test_acc, test_losses):
+def run_for_epoch(num_epochs, model, device, train_loader, test_loader, optimizer, scheduler):
   for epoch in range(1, num_epochs+1):
     print(f'Epoch {epoch}')
-    train(model, device, train_loader, optimizer, train_acc, train_losses)
+    train(model, device, train_loader, optimizer)
     scheduler.step()
-    test(model, device, test_loader, test_acc, test_losses)
-  
-def plot_dataset_images(batch_data, batch_label):
-  fig = plt.figure()
-  for i in range(12):
-    plt.subplot(3,4,i+1)
-    plt.tight_layout()
-    plt.imshow(batch_data[i].squeeze(0), cmap='gray')
-    plt.title(batch_label[i].item())
-    plt.xticks([])
-    plt.yticks([])
+    test(model, device, test_loader)
 
-def plot_loss_accuracy_graph(train_losses, train_acc, test_losses, test_acc):
+def plot_loss_accuracy_graph():
   fig, axs = plt.subplots(2,2,figsize=(15,10))
   axs[0, 0].plot(train_losses)
   axs[0, 0].set_title("Training Loss")
