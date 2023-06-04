@@ -85,8 +85,8 @@ def run_for_epoch(num_epochs, model, device, train_loader, test_loader, optimize
   for epoch in range(1, num_epochs+1):
     print(f'Epoch {epoch}')
     train(model, device, train_loader, optimizer)
-    scheduler.step()
     test(model, device, test_loader)
+    scheduler.step()
 
 def plot_loss_accuracy_graph():
   fig, axs = plt.subplots(2,2,figsize=(15,10))
