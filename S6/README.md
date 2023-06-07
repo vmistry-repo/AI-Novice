@@ -304,3 +304,16 @@ Test set: Average loss: 0.0161, Accuracy: 9945/10000 (99.45%)                   
 
 Adjusting learning rate of group 0 to 1.0000e-03.
 ```
+
+## Usage
+Same details as above can be verified by loading S6.ipynb along with utils.py and model.py, and executing all the cells of the notebook.
+
+## Requirements
+The following packages are required to run the code:
+
+- PyTorch
+- NumPy
+- Matplotlib
+- Python 3.x
+- torchvision
+- Jupyter Notebook or JupyterLab
