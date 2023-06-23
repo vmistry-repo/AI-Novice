@@ -19,7 +19,7 @@ To reduce the number of parameters under 8k and achieve 99% test accuracy under 
 
 ## Results
 Best Accuracy: 99.15
-
+```
 ----------------------------------------------------------------
         Layer (type)               Output Shape         Param #
 ================================================================
@@ -60,11 +60,11 @@ Forward/backward pass size (MB): 0.47
 Params size (MB): 0.03
 Estimated Total Size (MB): 0.50
 ----------------------------------------------------------------
-
+```
 ## Analysis
-High number of Channels is not a way to increase MNIST accuracy for platform/parameter constraint environment.
-Need to have BN, Dropouts after each convolution block.
-AntMan is our Channel DJ.
+- High number of Channels is not a way to increase MNIST accuracy for platform/parameter constraint environment.
+- Need to have BN, Dropouts after each convolution block.
+- AntMan(1x1) is our Channel DJ(mix and reducing channel by merging similar feature channels).
 
 ## Usage
 

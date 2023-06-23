@@ -19,7 +19,7 @@ To add the image transformation of removing RandomErasing, making training hard,
 
 ## Results
 Best Accuracy: 99.07
-
+```
 ----------------------------------------------------------------
         Layer (type)               Output Shape         Param #
 ================================================================
@@ -62,9 +62,9 @@ Forward/backward pass size (MB): 0.49
 Params size (MB): 0.02
 Estimated Total Size (MB): 0.52
 ----------------------------------------------------------------
-
+```
 ## Analysis
-Image transformation does help reducing overfitting, but this doesn't always results in better model training, need to observe data type and then add from several transformations which suits the best
+- Image transformation does help reducing overfitting, but this doesn't always results in better model training, need to observe data type and then add from several transformations which suits the best
 
 ## Usage
 

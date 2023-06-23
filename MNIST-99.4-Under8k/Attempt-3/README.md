@@ -23,7 +23,7 @@ To achieve 99.4 % test accuracy under 8k params
 
 ## Results
 Best Accuracy: 99.42
-
+```
 ----------------------------------------------------------------
         Layer (type)               Output Shape         Param #
 ================================================================
@@ -65,9 +65,10 @@ Forward/backward pass size (MB): 0.61
 Params size (MB): 0.03
 Estimated Total Size (MB): 0.64
 ----------------------------------------------------------------
-
+```
 ## Analysis
-Using ADAM with ReduceLROnPlateau, does help the model training atleast for MNIST compared to SGD on same model, further we have used squeez and expand as required. Also RF of the model above 20 is required to achieve such accuracy 
+- Using ADAM with ReduceLROnPlateau, does help the model training atleast for MNIST compared to SGD on same model, further we have used squeez and expand as required. 
+- Also RF of the model above 20 is required to achieve such accuracy 
 
 ## Usage
 
