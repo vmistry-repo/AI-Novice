@@ -16,7 +16,7 @@ Implementation has been divided into following files
 To achieve ~70 % training and test accuracy under 50k params
 
 ## Model Structure and Params
-
+```
 ----------------------------------------------------------------
         Layer (type)               Output Shape         Param #
 ================================================================
@@ -68,7 +68,7 @@ Forward/backward pass size (MB): 1.58
 Params size (MB): 0.07
 Estimated Total Size (MB): 1.66
 ----------------------------------------------------------------
-
+```
 ## Analysis
 
 _Faster training_: Batch normalization speeds up the training of neural networks by reducing the internal covariate shift. The distribution of inputs to each layer of the network remains more stable during training, which can lead to faster and more stable convergence.
