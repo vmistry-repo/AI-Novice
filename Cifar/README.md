@@ -27,8 +27,8 @@ To achieve ~70% test accuracy under 50k params, while comparing BN/GN/LN
 ## Results
 
 ### Using BN:
-_Best Train Accuracy_: 68.80
-_Best Test Accuracy_:  70.75
+- _Best Train Accuracy_: 68.80 <br>
+- _Best Test Accuracy_:  70.75 <br>
 ```
 ----------------------------------------------------------------
         Layer (type)               Output Shape         Param #
@@ -86,8 +86,8 @@ Accuracy/Loss Graph
 ![image](https://github.com/vmistry-repo/AI-Novice/assets/12965753/f2feb571-a148-40fe-8995-bd988c6bf348)
 
 ### Using GN:
-_Best Train Accuracy_: 60.18
-_Best Test Accuracy_:  63.97%
+- _Best Train Accuracy_: 60.18 <br>
+- _Best Test Accuracy_:  63.97 <br>
 ```
 ----------------------------------------------------------------
         Layer (type)               Output Shape         Param #
@@ -145,8 +145,8 @@ Accuracy/Loss Graph
 ![image](https://github.com/vmistry-repo/AI-Novice/assets/12965753/5da863a2-be0f-4b6c-83df-f2a88ffaaba8)
 
 ### Using LN:
-_Best Train Accuracy_: 53
-_Best Test Accuracy_:  57.04%
+- _Best Train Accuracy_: 53 <br>
+- _Best Test Accuracy_:  57.04 <br>
 ```
 ----------------------------------------------------------------
         Layer (type)               Output Shape         Param #
@@ -211,7 +211,7 @@ _Group Normalization (GN)_: GN is an alternative to BN that performs normalizati
 
 _Layer Normalization (LN)_: LN normalizes the activations of each layer over the features dimension (i.e., the channels), which can make it well-suited for sequential data or tasks where the data has a strong temporal or spatial structure. In CIFAR-10, as of now we don't have similar kind of data sorted out, and we observed the performance. Also, LN did not perform as well as BN or GN on larger batch sizes or when the data is less structured, hence has lowest accuracy too in our case
 
-## Misclassification Images
+## Misclassified Images
 
 We have misclassification of images in each case. Following is the snapshot from the model using BN
 
