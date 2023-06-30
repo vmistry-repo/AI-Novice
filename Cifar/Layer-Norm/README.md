@@ -16,7 +16,7 @@ Implementation has been divided into following files
 To achieve ~70 % training and test accuracy under 50k params
 
 ## Model Structure and Params
-
+```
 ----------------------------------------------------------------
         Layer (type)               Output Shape         Param #
 ================================================================
@@ -68,7 +68,7 @@ Forward/backward pass size (MB): 0.54
 Params size (MB): 0.17
 Estimated Total Size (MB): 0.72
 ----------------------------------------------------------------
-
+```
 ## Analysis
 
 _More stable on small batches_: LN is more stable than BN and GN on small batches. BN and GN compute batch statistics, which can produce unstable results on small batches. LN normalizes the inputs for each individual sample, which can reduce the noise introduced by small batch sizes.

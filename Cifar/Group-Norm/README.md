@@ -16,7 +16,7 @@ Implementation has been divided into following files
 To achieve ~70 % training and test accuracy under 50k params
 
 ## Model Structure and Params
-
+```
 ----------------------------------------------------------------
         Layer (type)               Output Shape         Param #
 ================================================================
@@ -68,7 +68,7 @@ Forward/backward pass size (MB): 0.60
 Params size (MB): 0.18
 Estimated Total Size (MB): 0.79
 ----------------------------------------------------------------
-
+```
 ## Analysis
 
 _Less sensitive to batch size_: GN is less sensitive to batch size than BN. BN requires a large batch size to compute accurate batch statistics, while GN can work well with smaller batch sizes. This makes GN more suitable for training models on limited computational resources or with small datasets.
