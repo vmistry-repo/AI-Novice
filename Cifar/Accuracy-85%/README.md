@@ -24,7 +24,7 @@ Here model is using
 
 _Increased receptive field_: Dilated convolutions can increase the receptive field (i.e., the area of the input that influences a given output) without increasing the number of parameters or the computation required. This is because dilated convolutions use a sparse kernel with gaps (dilation) between the kernel elements, effectively increasing the size of the kernel.
 
-[----IMAGE HERE-----](https://towardsdatascience.com/review-dilated-convolution-semantic-segmentation-9d5a5bd768f5)
+![conv-dial](https://github.com/vmistry-repo/AI-Novice/assets/12965753/4c1f0f45-573a-493e-a53d-63ab33207eb9)
 
 _Improved multiscale processing_: Dilated convolutions can be used to process an image at multiple scales, by varying the dilation rate. This allows the network to capture features at different scales, which can be useful for tasks such as object detection and segmentation.
 
