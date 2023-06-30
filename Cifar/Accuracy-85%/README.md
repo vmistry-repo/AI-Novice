@@ -24,7 +24,7 @@ Here model is using
 
 _Increased receptive field_: Dilated convolutions can increase the receptive field (i.e., the area of the input that influences a given output) without increasing the number of parameters or the computation required. This is because dilated convolutions use a sparse kernel with gaps (dilation) between the kernel elements, effectively increasing the size of the kernel.
 
-----IMAGE HERE-----
+[----IMAGE HERE-----](https://towardsdatascience.com/review-dilated-convolution-semantic-segmentation-9d5a5bd768f5)
 
 _Improved multiscale processing_: Dilated convolutions can be used to process an image at multiple scales, by varying the dilation rate. This allows the network to capture features at different scales, which can be useful for tasks such as object detection and segmentation.
 
@@ -47,8 +47,9 @@ To achieve ~85% test accuracy under 200K params, while using _Dialated Convoluti
 
 ## Results
 
-- _Best Train Accuracy_: 68.80 <br>
-- _Best Test Accuracy_:  70.75 <br>
+- _Best Train Accuracy_: 79.29 <br>
+- _Best Test Accuracy_:  85.84 <br>
+
 ```
 ----------------------------------------------------------------
         Layer (type)               Output Shape         Param #
@@ -121,22 +122,30 @@ To achieve ~85% test accuracy under 200K params, while using _Dialated Convoluti
              ReLU-66           [-1, 64, 26, 26]               0
       BatchNorm2d-67           [-1, 64, 26, 26]             128
           Dropout-68           [-1, 64, 26, 26]               0
-        AvgPool2d-69             [-1, 64, 1, 1]               0
-           Conv2d-70             [-1, 10, 1, 1]             640
+           Conv2d-69          [-1, 128, 26, 26]           2,304
+             ReLU-70          [-1, 128, 26, 26]               0
+      BatchNorm2d-71          [-1, 128, 26, 26]             256
+          Dropout-72          [-1, 128, 26, 26]               0
+           Conv2d-73           [-1, 64, 26, 26]           8,192
+             ReLU-74           [-1, 64, 26, 26]               0
+      BatchNorm2d-75           [-1, 64, 26, 26]             128
+          Dropout-76           [-1, 64, 26, 26]               0
+        AvgPool2d-77             [-1, 64, 1, 1]               0
+           Conv2d-78             [-1, 10, 1, 1]             640
 ================================================================
-Total params: 89,536
-Trainable params: 89,536
+Total params: 100,416
+Trainable params: 100,416
 Non-trainable params: 0
 ----------------------------------------------------------------
 Input size (MB): 0.01
-Forward/backward pass size (MB): 34.08
-Params size (MB): 0.34
-Estimated Total Size (MB): 34.43
+Forward/backward pass size (MB): 38.04
+Params size (MB): 0.38
+Estimated Total Size (MB): 38.43
 ----------------------------------------------------------------
 ```
-Accuracy/Loss Graph
----IMAGE---
+### Accuracy/Loss Graph
 
+![image](https://github.com/vmistry-repo/AI-Novice/assets/12965753/04c7577e-d2f0-426c-8b11-aed398d23e12)
 
 ## Analysis
 
@@ -150,7 +159,7 @@ If we have resource constraint environment, _Depthwise Separable Convolution_ ar
 
 We have details of the failed validation test cases shown below. Following is the snapshot from the model training itself
 
----IMAGE---
+![image](https://github.com/vmistry-repo/AI-Novice/assets/12965753/324a48ec-26ae-46ca-9c2c-9c8dcb1bb56e)
 
 ## Usage
 
