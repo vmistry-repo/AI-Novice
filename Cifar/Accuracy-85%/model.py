@@ -7,7 +7,6 @@ from tqdm import tqdm
 from torchsummary import summary
 from torchvision.transforms import ToTensor
 
-dropout_value = 0.05
 train_losses = []
 test_losses = []
 train_acc = []
@@ -19,7 +18,7 @@ g_predicted_labels = []
 classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
 class Net(nn.Module):
-    def __init__(self, dropout_value=0.1):
+    def __init__(self, dropout_value=0.05):
         super(Net, self).__init__()
 
         self.convblock1 = self.conv_block(3, 64, (3, 3), 0, dropout_value)
@@ -31,7 +30,8 @@ class Net(nn.Module):
         self.convblock7 = self.dial_conv_block(64, 128, (3, 3), 12, dropout_value, groups=32, dilation=12)
         self.convblock8 = self.dial_conv_block(64, 128, (3, 3), 16, dropout_value, groups=32, dilation=16)
         self.convblock9 = self.dial_conv_block(64, 128, (3, 3), 20, dropout_value, groups=32, dilation=20)
-        self.convblock10 = self.output_block(64, 10)
+        self.convblock10 = self.dial_conv_block(64, 128, (3, 3), 22, dropout_value, groups=32, dilation=22)
+        self.convblock11 = self.output_block(64, 10)
 
         self.dropout = nn.Dropout(dropout_value)
 
@@ -45,7 +45,8 @@ class Net(nn.Module):
         x = x + self.convblock7(x)
         x = x + self.convblock8(x)
         x = x + self.convblock9(x)
-        x = self.convblock10(x)
+        x = x + self.convblock10(x)
+        x = self.convblock11(x)
 
         x = x.view(-1, 10)
         return F.log_softmax(x, dim=-1)
@@ -64,7 +65,7 @@ class Net(nn.Module):
             nn.ReLU(),
             nn.BatchNorm2d(out_channels),
             nn.Dropout(dropout_value),
-            nn.Conv2d(in_channels=out_channels, out_channels=in_channels, kernel_size=(1, 1), bias=False),
+            nn.Conv2d(in_channels=out_channels, out_channels=in_channels, kernel_size=(1, 1), padding=0, bias=False),
             nn.ReLU(),
             nn.BatchNorm2d(in_channels),
             nn.Dropout(dropout_value),
@@ -72,8 +73,8 @@ class Net(nn.Module):
 
     def output_block(self, in_channels, out_channels):
         return nn.Sequential(
-            nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=(1, 1), padding=0, bias=False),
-            nn.AvgPool2d(kernel_size=26)
+            nn.AvgPool2d(kernel_size=26),
+            nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=(1, 1), padding=0, bias=False)
         )
         
 def train(model, device, train_loader, criterion, optimizer, epoch):
