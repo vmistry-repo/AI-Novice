@@ -12,7 +12,9 @@ This directory is organised as:
 
 ### About Model
 
-This model follows Resnet alike architecture. It is defined as below
+This model follows Resnet alike architecture. It is defined as below.
+Ignore Droupout, it is there with 0 value, equivalent of not being present.
+But can be utilised to reduce overfitting if required.
 ```
 ----------------------------------------------------------------
         Layer (type)               Output Shape         Param #
