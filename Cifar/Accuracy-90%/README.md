@@ -1,5 +1,5 @@
 # PyTorch CNN Model for Image Classification - CIFAR-10 Dataset
-## Target - Achieve 90% Test Validation accuracy under 24 EPOCH - Use OneCycleLR Policy and Residual Connections
+## Target - Achieve 90% Test Validation accuracy under 24 EPOCH <br> Use OneCycleLR Policy and Residual Connections
 
 This directory is organised as:
 - model.py
