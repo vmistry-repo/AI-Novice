@@ -1,156 +1,112 @@
 # PyTorch CNN Model for Image Classification - CIFAR-10 Dataset
-## Target - Achieve 85% Test Validation accuracy under 200k parameters
+## Target - Achieve 90% Test Validation accuracy under 24 EPOCH - Use OneCycleLR Policy and Residual Connections
 
 This directory is organised as:
 - model.py
 - transform.py
 - utils.py
+- dataset.py
 - Cifar10.ipynb
 
 ## Description
 
-The model consists of several convolutional blocks, each of which contains multiple convolutional layers with ReLU activation, batch normalization, and dropout. The convolutional blocks are connected in a residual fashion, where the output of each block is added to the output of the previous block. This helps to mitigate the vanishing gradient problem and enables the model to learn more complex features.
+### About Model
 
-The output block of the model consists of a global average pooling layer, followed by a 1x1 convolutional layer that reduces the number of channels to the number of classes (10 in this case). The output is then passed through a log softmax activation function to produce the final class probabilities.
-
-The code above modularizes the creation of each convolutional block and the output block, making it easier to modify the architecture by changing the parameters for each block or adding/removing blocks altogether.
-
-Here model is using
-- Regular Conv Block
-- Dialted Conv Block
-- Depthwise Searable Conv Block
-
-### Benifits of using _Dialated Convolutions_
-
-_Increased receptive field_: Dilated convolutions can increase the receptive field (i.e., the area of the input that influences a given output) without increasing the number of parameters or the computation required. This is because dilated convolutions use a sparse kernel with gaps (dilation) between the kernel elements, effectively increasing the size of the kernel.
-
-----IMAGE HERE-----
-
-_Improved multiscale processing_: Dilated convolutions can be used to process an image at multiple scales, by varying the dilation rate. This allows the network to capture features at different scales, which can be useful for tasks such as object detection and segmentation.
-
-_Reduced spatial resolution loss_: In traditional convolutional networks, the spatial resolution of the feature maps decreases as the layers become deeper. Dilated convolutions can reduce this spatial resolution loss by allowing the network to process larger receptive fields while preserving the spatial resolution.
-
-_Better parameter efficiency_: Dilated convolutions can be used to increase the effective size of the convolutional kernel without increasing the number of parameters, which can improve the parameter efficiency of the network. Observe the Parameters below.
-
-### Benifits of using _Depthwise Separable Convolution_
-
-_Lower computational cost_: Depthwise Separable Convolution separates the spatial and channel-wise convolution operations into two separate layers. This reduces the number of parameters and computations required compared to traditional convolutional layers. As a result, models that use Depthwise Separable Convolution are faster and more memory-efficient.
-
-_Better accuracy on small datasets_: Depthwise Separable Convolution can help improve the accuracy of models trained on small datasets. This is because it reduces the risk of overfitting by reducing the number of model parameters.
-
-_Improved generalization_: Depthwise Separable Convolution can help improve the generalization performance of models by enabling them to learn more robust and discriminative features. This is because it allows the model to learn the spatial patterns and channel-wise interactions separately.
-
-_Faster training_: Depthwise Separable Convolution can speed up training time by reducing the number of computations required. This allows models to be trained faster and with fewer resources.
-
-## Targets
-To achieve ~85% test accuracy under 200K params, while using _Dialated Convolutions_ and _Depthwise Separable Convolution_
-
-## Results
-
-- _Best Train Accuracy_: 68.80 <br>
-- _Best Test Accuracy_:  70.75 <br>
+This model follows Resnet alike architecture. It is defined as below
 ```
 ----------------------------------------------------------------
         Layer (type)               Output Shape         Param #
 ================================================================
-            Conv2d-1           [-1, 64, 30, 30]           1,728
-              ReLU-2           [-1, 64, 30, 30]               0
-       BatchNorm2d-3           [-1, 64, 30, 30]             128
-           Dropout-4           [-1, 64, 30, 30]               0
-            Conv2d-5          [-1, 128, 28, 28]           2,304
-              ReLU-6          [-1, 128, 28, 28]               0
-       BatchNorm2d-7          [-1, 128, 28, 28]             256
-           Dropout-8          [-1, 128, 28, 28]               0
-            Conv2d-9           [-1, 64, 28, 28]           8,192
-             ReLU-10           [-1, 64, 28, 28]               0
-      BatchNorm2d-11           [-1, 64, 28, 28]             128
-          Dropout-12           [-1, 64, 28, 28]               0
-           Conv2d-13          [-1, 128, 26, 26]           2,304
-             ReLU-14          [-1, 128, 26, 26]               0
-      BatchNorm2d-15          [-1, 128, 26, 26]             256
-          Dropout-16          [-1, 128, 26, 26]               0
-           Conv2d-17           [-1, 64, 26, 26]           8,192
-             ReLU-18           [-1, 64, 26, 26]               0
-      BatchNorm2d-19           [-1, 64, 26, 26]             128
-          Dropout-20           [-1, 64, 26, 26]               0
-           Conv2d-21          [-1, 128, 26, 26]           2,304
-             ReLU-22          [-1, 128, 26, 26]               0
-      BatchNorm2d-23          [-1, 128, 26, 26]             256
-          Dropout-24          [-1, 128, 26, 26]               0
-           Conv2d-25           [-1, 64, 26, 26]           8,192
-             ReLU-26           [-1, 64, 26, 26]               0
-      BatchNorm2d-27           [-1, 64, 26, 26]             128
-          Dropout-28           [-1, 64, 26, 26]               0
-           Conv2d-29          [-1, 128, 26, 26]           2,304
-             ReLU-30          [-1, 128, 26, 26]               0
-      BatchNorm2d-31          [-1, 128, 26, 26]             256
-          Dropout-32          [-1, 128, 26, 26]               0
-           Conv2d-33           [-1, 64, 26, 26]           8,192
-             ReLU-34           [-1, 64, 26, 26]               0
-      BatchNorm2d-35           [-1, 64, 26, 26]             128
-          Dropout-36           [-1, 64, 26, 26]               0
-           Conv2d-37          [-1, 128, 26, 26]           2,304
-             ReLU-38          [-1, 128, 26, 26]               0
-      BatchNorm2d-39          [-1, 128, 26, 26]             256
-          Dropout-40          [-1, 128, 26, 26]               0
-           Conv2d-41           [-1, 64, 26, 26]           8,192
-             ReLU-42           [-1, 64, 26, 26]               0
-      BatchNorm2d-43           [-1, 64, 26, 26]             128
-          Dropout-44           [-1, 64, 26, 26]               0
-           Conv2d-45          [-1, 128, 26, 26]           2,304
-             ReLU-46          [-1, 128, 26, 26]               0
-      BatchNorm2d-47          [-1, 128, 26, 26]             256
-          Dropout-48          [-1, 128, 26, 26]               0
-           Conv2d-49           [-1, 64, 26, 26]           8,192
-             ReLU-50           [-1, 64, 26, 26]               0
-      BatchNorm2d-51           [-1, 64, 26, 26]             128
-          Dropout-52           [-1, 64, 26, 26]               0
-           Conv2d-53          [-1, 128, 26, 26]           2,304
-             ReLU-54          [-1, 128, 26, 26]               0
-      BatchNorm2d-55          [-1, 128, 26, 26]             256
-          Dropout-56          [-1, 128, 26, 26]               0
-           Conv2d-57           [-1, 64, 26, 26]           8,192
-             ReLU-58           [-1, 64, 26, 26]               0
-      BatchNorm2d-59           [-1, 64, 26, 26]             128
-          Dropout-60           [-1, 64, 26, 26]               0
-           Conv2d-61          [-1, 128, 26, 26]           2,304
-             ReLU-62          [-1, 128, 26, 26]               0
-      BatchNorm2d-63          [-1, 128, 26, 26]             256
-          Dropout-64          [-1, 128, 26, 26]               0
-           Conv2d-65           [-1, 64, 26, 26]           8,192
-             ReLU-66           [-1, 64, 26, 26]               0
-      BatchNorm2d-67           [-1, 64, 26, 26]             128
-          Dropout-68           [-1, 64, 26, 26]               0
-        AvgPool2d-69             [-1, 64, 1, 1]               0
-           Conv2d-70             [-1, 10, 1, 1]             640
+            Conv2d-1           [-1, 64, 32, 32]           1,728
+       BatchNorm2d-2           [-1, 64, 32, 32]             128
+              ReLU-3           [-1, 64, 32, 32]               0
+           Dropout-4           [-1, 64, 32, 32]               0
+            Conv2d-5          [-1, 128, 32, 32]          73,728
+         MaxPool2d-6          [-1, 128, 16, 16]               0
+       BatchNorm2d-7          [-1, 128, 16, 16]             256
+              ReLU-8          [-1, 128, 16, 16]               0
+           Dropout-9          [-1, 128, 16, 16]               0
+           Conv2d-10          [-1, 128, 16, 16]         147,456
+      BatchNorm2d-11          [-1, 128, 16, 16]             256
+             ReLU-12          [-1, 128, 16, 16]               0
+          Dropout-13          [-1, 128, 16, 16]               0
+           Conv2d-14          [-1, 128, 16, 16]         147,456
+      BatchNorm2d-15          [-1, 128, 16, 16]             256
+             ReLU-16          [-1, 128, 16, 16]               0
+          Dropout-17          [-1, 128, 16, 16]               0
+           Conv2d-18          [-1, 256, 16, 16]         294,912
+        MaxPool2d-19            [-1, 256, 8, 8]               0
+      BatchNorm2d-20            [-1, 256, 8, 8]             512
+             ReLU-21            [-1, 256, 8, 8]               0
+          Dropout-22            [-1, 256, 8, 8]               0
+           Conv2d-23            [-1, 512, 8, 8]       1,179,648
+        MaxPool2d-24            [-1, 512, 4, 4]               0
+      BatchNorm2d-25            [-1, 512, 4, 4]           1,024
+             ReLU-26            [-1, 512, 4, 4]               0
+          Dropout-27            [-1, 512, 4, 4]               0
+           Conv2d-28            [-1, 512, 4, 4]       2,359,296
+      BatchNorm2d-29            [-1, 512, 4, 4]           1,024
+             ReLU-30            [-1, 512, 4, 4]               0
+          Dropout-31            [-1, 512, 4, 4]               0
+           Conv2d-32            [-1, 512, 4, 4]       2,359,296
+      BatchNorm2d-33            [-1, 512, 4, 4]           1,024
+             ReLU-34            [-1, 512, 4, 4]               0
+          Dropout-35            [-1, 512, 4, 4]               0
+        MaxPool2d-36            [-1, 512, 1, 1]               0
+           Linear-37                   [-1, 10]           5,120
 ================================================================
-Total params: 89,536
-Trainable params: 89,536
+Total params: 6,573,120
+Trainable params: 6,573,120
 Non-trainable params: 0
 ----------------------------------------------------------------
 Input size (MB): 0.01
-Forward/backward pass size (MB): 34.08
-Params size (MB): 0.34
-Estimated Total Size (MB): 34.43
+Forward/backward pass size (MB): 8.00
+Params size (MB): 25.07
+Estimated Total Size (MB): 33.09
 ----------------------------------------------------------------
 ```
-Accuracy/Loss Graph
----IMAGE---
 
+## Targets
+To achieve ~90% test accuracy under 24 EPOCHS, using the above defined architecture.
+To use OneCycleLR Policy with following attributes and values:
+```
+Total Epochs = 24
+Max at Epoch = 5
+LRMIN = FIND
+LRMAX = FIND
+NO Annihilation
+```
+To use following transformations:
+- RandomCrop 32, 32 (after padding of 4)
+- FlipLR
+- CutOut(8, 8)
+
+## Results
+
+- _Best Train Accuracy_: 98.01 <br>
+- _Best Test Accuracy_:  92.72 <br>
+
+Accuracy/Loss Graph
+![image](https://github.com/vmistry-repo/AI-Novice/assets/12965753/2ff6033e-aa85-479e-bfc5-d885d048d006)
 
 ## Analysis
 
-If we were not to use _Depthwise Separable Convolution_ we would not be able to achieve the target due to parameter violation.
+OneCycleLR is a learning rate scheduling technique used in deep learning that can help improve the performance and speed of model training.<br>
+Here are some benefits of using OneCycleLR:
 
-_Dialated Convolutions_ on the other hand helps to increase the spatial feature extraction, and increase the Receptive field rapidly.
+_Faster convergence_: OneCycleLR helps to speed up the convergence of deep learning models by allowing them to quickly find a good set of weights during training.
 
-If we have resource constraint environment, _Depthwise Separable Convolution_ are very useful.
+_Improved accuracy_: OneCycleLR can help improve the accuracy of deep learning models by allowing them to explore the parameter space more efficiently, leading to better generalization performance.
+
+_Reduced overfitting_: OneCycleLR can help reduce overfitting of deep learning models by preventing the learning rate from becoming too large, which can cause the model to overfit to the training data.
+
+Though we can see signs of overfitting which can be reduced with modifications in the Netowrk or Transformations.
 
 ## Misclassified Images
 
 We have details of the failed validation test cases shown below. Following is the snapshot from the model training itself
 
----IMAGE---
+![image](https://github.com/vmistry-repo/AI-Novice/assets/12965753/20481b14-b1e6-4b27-b0f3-d119bb7a7f61)
 
 ## Usage
 
