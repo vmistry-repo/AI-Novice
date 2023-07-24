@@ -1,7 +1,5 @@
 import torch
 import torch.nn.functional as F
-import model, dataset, utils
-import transform as trans
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
@@ -17,8 +15,11 @@ import torchvision.transforms as transforms
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 
-!pip install torch-lr-finder
-
+# Imports
+import models.model as model 
+import data.dataset as dataset
+import utils.utils as utils
+import trainers.transform as trans
 ####
 
 device = utils.get_device()
@@ -85,7 +86,6 @@ utils.visualise_dataset(train_loader, classes)
 
 ####
 
-!pip install torchsummary
 from torchsummary import summary
 use_cuda = torch.cuda.is_available()
 device = torch.device("cuda" if use_cuda else "cpu")
