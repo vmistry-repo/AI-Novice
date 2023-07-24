@@ -30,21 +30,7 @@ import trainers.transform as trans
 ############# VARS #############
 
 SEED = 42
-'''
-pixel_means
-pixel_stds
-train_transforms
-test_transforms
-trainset
-train_loader
-testset
-test_loader
-classes
-criterion
-scheduler
-lr_finder
-optimizer
-'''
+
 ####################################################
 ############# CUDA #############
 
@@ -75,7 +61,7 @@ def set_pixel_mean_std(dataset):
 
     print('CIFAR-10 pixel means:', pixel_means)
     print('CIFAR-10 pixel stds:', pixel_stds)
-    print(cifar10_train.data.shape)
+    print(dataset.data.shape)
 
 ####################################################
 ############# INIT ARGS #############
@@ -90,7 +76,7 @@ class args():
 ####################################################
 ############# SET TRANSFORMS #############
 
-def set_transforms():
+def get_transforms():
     global train_transforms, test_transforms
     train_transforms = trans.get_train_transforms(pixel_means, pixel_stds)
     test_transforms = trans.get_test_transforms(pixel_means, pixel_stds)
@@ -122,17 +108,19 @@ def set_classes(_classes):
 
 ####################################################
 ############# VISUALIZE move to ipynb #############
-#utils.visualise_dataset(train_loader, classes)        
+def visualise_dataset():
+    utils.visualise_dataset(train_loader, classes)        
 
 ####################################################
 ############# SUMMARY #############
 
-def get_model_summary(model):
+def get_model_summary(mymodel):
+    global _model, device
     use_cuda = torch.cuda.is_available()
     device = torch.device("cuda" if use_cuda else "cpu")
     print(device)
-    cnnmodel = model.Net().to(device)
-    summary(cnnmodel, input_size=(3, 32, 32))
+    _model = mymodel.Net().to(device)
+    summary(_model, input_size=(3, 32, 32))
 
 ####################################################
 ############# LOSS Fnq #############
@@ -144,17 +132,17 @@ def set_lossFn(loss):
 ####################################################
 ############# OPTIMIZER #############
 
-def set_optim(optimizerFnq, model, lr=0.03, weight_decay=1e-5):
+def set_optim(optimizerFnq, lr=0.03, weight_decay=1e-5):
     global optimizer
-    optimizer = optimizerFnq(model.parameters(), lr, weight_decay)
-    #optim.Adam(cnnmodel.parameters(), lr=0.03, weight_decay=1e-5)
+    #optimizer = optimizerFnq(_model.parameters(), lr, weight_decay)
+    optimizer = optim.Adam(_model.parameters(), lr=0.03, weight_decay=1e-5)
 
 ####################################################
 ############# LRFinder #############
 
-def set_lrfinder(model):
+def set_lrfinder():
     global lr_finder
-    lr_finder = LRFinder(model, optimizer, criterion, device="cuda")
+    lr_finder = LRFinder(_model, optimizer, criterion, device="cuda")
     lr_finder.range_test(train_loader, end_lr=10, num_iter=200, step_mode="exp")
     lr_finder.plot()
     lr_finder.reset()
@@ -184,11 +172,11 @@ def set_scheduler():
 ####################################################
 ############# TRAIN-TEST #############
 
-def test_and_train(model, EPOCHS=24):
+def test_and_train(EPOCHS=24):
     for epoch in range(1, EPOCHS+1):
         print(f'Epoch {epoch}')
-        model.train(model, device, train_loader, criterion, optimizer, epoch, scheduler)
-        model.test(model, device, test_loader)
+        model.train(_model, device, train_loader, criterion, optimizer, epoch, scheduler)
+        model.test(_model, device, test_loader)
 
 ####
 # To show the misclassified Images
