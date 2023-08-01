@@ -2,6 +2,7 @@
 ############# IMPORTS #############
 
 import cv2
+import math
 import torch
 import torchvision
 import torch.nn as nn
@@ -16,6 +17,8 @@ from torch.optim.lr_scheduler import OneCycleLR
 
 from pytorch_grad_cam import GradCAM
 from pytorch_grad_cam.utils.image import show_cam_on_image
+
+import matplotlib.pyplot as plt
 
 import numpy as np
 
@@ -283,3 +286,4 @@ def get_misclassified_data(model, device, test_loader):
                 if pred != label:
                     misclassified_data.append((image, label, pred))
     return misclassified_data
+
