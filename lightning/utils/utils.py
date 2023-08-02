@@ -54,7 +54,7 @@ def visualise_dataset(trainloader, classes):
   fig.subplots_adjust(hspace=1)
   plt.show()
 
-def plot_misclassifeid_images(images, actual_labels, predicted_labels):
+def plot_misclassifeid_images(images, actual_labels, predicted_labels, classes):
     n_rows=5
     n_cols=2
     n_images=10
