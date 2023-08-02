@@ -53,3 +53,23 @@ def visualise_dataset(trainloader, classes):
 
   fig.subplots_adjust(hspace=1)
   plt.show()
+
+def plot_misclassifeid_images(images, actual_labels, predicted_labels):
+    n_rows=5
+    n_cols=2
+    n_images=10
+    fig, axes = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=(12, 6))
+    for i, ax in enumerate(axes.flat):
+        if i < len(images) and i < n_images:
+            image = images[i].cpu().numpy().transpose((1, 2, 0))
+            image = (image * 0.5) + 0.5
+            actual = actual_labels[i].item()
+            predicted = predicted_labels[i].item()
+            ax.imshow(image)
+            ax.set_title(f"Actual: {classes[actual]}\nPredicted: {classes[predicted]}")
+            ax.axis('off')
+        else:
+            ax.axis('off')
+
+    fig.subplots_adjust(hspace=1)
+    plt.show()

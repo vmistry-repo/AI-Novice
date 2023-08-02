@@ -249,6 +249,27 @@ def display_gradcam_output(data: list,
         plt.xticks([])
         plt.yticks([])
         
+def get_misclassified_imagNlable(misclassified_data):
+    """
+    Function to extract misclassified images, actual labels and predicted labels from the misclassified_data list
+    :param misclassified_data: list of misclassified images, labels and predictions
+    """
+    # Lists to store misclassified Images, actual labels and predicted labels
+    misclassified_images = []
+    actual_labels = []
+    predicted_labels = []
+    
+    for data in misclassified_data:
+        # Extract image, actual label and predicted label from the misclassified data
+        image, label, pred = data
+        
+        # Append the data to the corresponding lists
+        misclassified_images.append(image)
+        actual_labels.append(label)
+        predicted_labels.append(pred)
+
+    return misclassified_images, actual_labels, predicted_labels
+
 def get_misclassified_data(model, device, test_loader):
     """
     Function to run the model on test set and return misclassified images

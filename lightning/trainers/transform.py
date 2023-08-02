@@ -5,6 +5,7 @@ import torchvision.transforms as transforms
 # Albumentations for augmentations
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
+import pytorch_lightning as pl
 
 cv2.setNumThreads(0)
 cv2.ocl.setUseOpenCL(False)
@@ -53,3 +54,24 @@ def get_test_transforms(pixel_means, pixel_stds):
       p=1.0
   )
   return test_transforms
+
+class AlbumentationsTransform(pl.LightningDataModule):
+    def __init__(self, train_transforms, test_transforms):
+        super().__init__()
+        self.train_transforms = train_transforms
+        self.test_transforms = test_transforms
+
+    def train_transform(self, image):
+        return self.train_transforms(image=image)["image"]
+
+    def test_transform(self, image):
+        return self.test_transforms(image=image)["image"]
+
+    def train_dataloader(self):
+        return train_loader
+
+    def val_dataloader(self):
+        return val_loader
+
+    def test_dataloader(self):
+        return test_loader
