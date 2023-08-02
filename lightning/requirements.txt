@@ -1,3 +1,4 @@
+pytorch-lightning
 torch-lr-finder
 torchsummary
 grad-cam
