@@ -56,10 +56,13 @@ def get_test_transforms(pixel_means, pixel_stds):
   return test_transforms
 
 class AlbumentationsTransform(pl.LightningDataModule):
-    def __init__(self, train_transforms, test_transforms):
+    def __init__(self, train_transforms, test_transforms, train_loader, test_loader, val_loader):
         super().__init__()
         self.train_transforms = train_transforms
         self.test_transforms = test_transforms
+        self.train_loader = train_loader
+        self.test_loader = test_loader
+        self.val_loader = val_loader
 
     def train_transform(self, image):
         return self.train_transforms(image=image)["image"]
@@ -68,10 +71,11 @@ class AlbumentationsTransform(pl.LightningDataModule):
         return self.test_transforms(image=image)["image"]
 
     def train_dataloader(self):
-        return train_loader
+        return self.train_loader
 
     def val_dataloader(self):
-        return val_loader
+        return self.val_loader
 
     def test_dataloader(self):
-        return test_loader
+        return self.test_loader
+
