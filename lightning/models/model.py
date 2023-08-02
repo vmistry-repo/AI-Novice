@@ -181,10 +181,7 @@ def plot_loss_accuracy_graph():
     axs[1, 1].plot(test_acc)
     axs[1, 1].set_title("Test Accuracy")
 
-def plot_misclassifeid_images():
-    images=g_misclassified
-    actual_labels=g_actual_labels
-    predicted_labels=g_predicted_labels
+def plot_misclassifeid_images(images, actual_labels, predicted_labels):
     n_rows=5
     n_cols=2
     n_images=10

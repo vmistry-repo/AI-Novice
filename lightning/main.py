@@ -274,10 +274,10 @@ def get_misclassified_data(model, device, test_loader):
             for image, label in zip(data, target):
 
                 # Add batch dimension to the image
-                image = image.unsqueeze(0)
+                _image = image.unsqueeze(0)
 
                 # Get the model prediction on the image
-                output = model(image)
+                output = model(_image)
 
                 # Convert the output from one-hot encoding to a value
                 pred = output.argmax(dim=1, keepdim=True)
