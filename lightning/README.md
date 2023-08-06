@@ -1,9 +1,11 @@
 # PyTorch CNN Model for Image Classification - CIFAR-10 Dataset
-## Target - AUse Pytorch Lightning to train CustomResnet Model
+## Target - To use Pytorch Lightning to train CustomResnet Model
 
 ## Description
 
-This is the same model that we had used in Cifar/Accuracy-85%. For details about the model please refer https://github.com/vmistry-repo/AI-Novice/blob/main/Cifar/Accuracy-85%25/README.md
+This is the same model that we had used in Cifar/Accuracy-85%. 
+For details about the model please refer [README](https://github.com/vmistry-repo/AI-Novice/blob/main/Cifar/Accuracy-85%25/README.md)
+
 
 ### Benifits of using _Pytorch Lightning_
 
