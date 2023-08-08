@@ -1,156 +1,120 @@
 # PyTorch CNN Model for Image Classification - CIFAR-10 Dataset
-## Target - Achieve 85% Test Validation accuracy under 200k parameters
-
-This directory is organised as:
-- model.py
-- transform.py
-- utils.py
-- Cifar10.ipynb
+## Target - To use Pytorch Lightning to train CustomResnet Model
 
 ## Description
 
-The model consists of several convolutional blocks, each of which contains multiple convolutional layers with ReLU activation, batch normalization, and dropout. The convolutional blocks are connected in a residual fashion, where the output of each block is added to the output of the previous block. This helps to mitigate the vanishing gradient problem and enables the model to learn more complex features.
+This is the same model that we had used in Cifar/Accuracy-85%. 
+For details about the model please refer [README](https://github.com/vmistry-repo/AI-Novice/blob/main/Cifar/Accuracy-85%25/README.md)
 
-The output block of the model consists of a global average pooling layer, followed by a 1x1 convolutional layer that reduces the number of channels to the number of classes (10 in this case). The output is then passed through a log softmax activation function to produce the final class probabilities.
 
-The code above modularizes the creation of each convolutional block and the output block, making it easier to modify the architecture by changing the parameters for each block or adding/removing blocks altogether.
+### Benifits of using _Pytorch Lightning_
 
-Here model is using
-- Regular Conv Block
-- Dialted Conv Block
-- Depthwise Searable Conv Block
+_Code Organization and Readability_: PyTorch Lightning enforces a clear and organized structure for your training code by separating out different components like data loading, model definition, training loop, and evaluation. This leads to cleaner and more readable code, making it easier to collaborate with others and maintain your projects.
 
-### Benifits of using _Dialated Convolutions_
+_Automatic Gradient Accumulation and Optimization_: PyTorch Lightning handles gradient accumulation and optimization automatically. It takes care of accumulating gradients over multiple batches if you need to use larger batch sizes for memory reasons, simplifying the process of gradient accumulation.
 
-_Increased receptive field_: Dilated convolutions can increase the receptive field (i.e., the area of the input that influences a given output) without increasing the number of parameters or the computation required. This is because dilated convolutions use a sparse kernel with gaps (dilation) between the kernel elements, effectively increasing the size of the kernel.
+_Standardized Training Loop_: With PyTorch Lightning, you don't need to write explicit training and validation loops. The framework provides a standardized training loop that includes batching, forward and backward passes, loss computation, and optimization. This reduces boilerplate code and lets you focus on model architecture and hyperparameters.
 
-----IMAGE HERE-----
+_Integration with Experiment Tracking Tools_: PyTorch Lightning integrates well with popular experiment tracking tools like TensorBoard and Neptune, allowing you to visualize and analyze training metrics, losses, and other relevant information. This makes it easier to monitor model performance and make informed decisions during training.
 
-_Improved multiscale processing_: Dilated convolutions can be used to process an image at multiple scales, by varying the dilation rate. This allows the network to capture features at different scales, which can be useful for tasks such as object detection and segmentation.
+_Automatic Distributed Training and Multi-GPU Support_: Distributed training across multiple GPUs or machines is simplified in PyTorch Lightning. The framework handles details like data parallelism and synchronization across devices, making it easier to scale up your training to leverage more computational resources.
 
-_Reduced spatial resolution loss_: In traditional convolutional networks, the spatial resolution of the feature maps decreases as the layers become deeper. Dilated convolutions can reduce this spatial resolution loss by allowing the network to process larger receptive fields while preserving the spatial resolution.
-
-_Better parameter efficiency_: Dilated convolutions can be used to increase the effective size of the convolutional kernel without increasing the number of parameters, which can improve the parameter efficiency of the network. Observe the Parameters below.
-
-### Benifits of using _Depthwise Separable Convolution_
-
-_Lower computational cost_: Depthwise Separable Convolution separates the spatial and channel-wise convolution operations into two separate layers. This reduces the number of parameters and computations required compared to traditional convolutional layers. As a result, models that use Depthwise Separable Convolution are faster and more memory-efficient.
-
-_Better accuracy on small datasets_: Depthwise Separable Convolution can help improve the accuracy of models trained on small datasets. This is because it reduces the risk of overfitting by reducing the number of model parameters.
-
-_Improved generalization_: Depthwise Separable Convolution can help improve the generalization performance of models by enabling them to learn more robust and discriminative features. This is because it allows the model to learn the spatial patterns and channel-wise interactions separately.
-
-_Faster training_: Depthwise Separable Convolution can speed up training time by reducing the number of computations required. This allows models to be trained faster and with fewer resources.
+_Support for Advanced Training Techniques_: PyTorch Lightning provides built-in support for advanced training techniques like mixed-precision training, early stopping, learning rate scheduling, and more. These features help improve training efficiency and convergence.
 
 ## Targets
-To achieve ~85% test accuracy under 200K params, while using _Dialated Convolutions_ and _Depthwise Separable Convolution_
-
+To achieve ~85% test accuracy under 200K params, while using _Pytorch Lightning_
 ## Results
 
-- _Best Train Accuracy_: 68.80 <br>
-- _Best Test Accuracy_:  70.75 <br>
+- _Best Train Accuracy_: 89.31 <br>
 ```
-----------------------------------------------------------------
-        Layer (type)               Output Shape         Param #
-================================================================
-            Conv2d-1           [-1, 64, 30, 30]           1,728
-              ReLU-2           [-1, 64, 30, 30]               0
-       BatchNorm2d-3           [-1, 64, 30, 30]             128
-           Dropout-4           [-1, 64, 30, 30]               0
-            Conv2d-5          [-1, 128, 28, 28]           2,304
-              ReLU-6          [-1, 128, 28, 28]               0
-       BatchNorm2d-7          [-1, 128, 28, 28]             256
-           Dropout-8          [-1, 128, 28, 28]               0
-            Conv2d-9           [-1, 64, 28, 28]           8,192
-             ReLU-10           [-1, 64, 28, 28]               0
-      BatchNorm2d-11           [-1, 64, 28, 28]             128
-          Dropout-12           [-1, 64, 28, 28]               0
-           Conv2d-13          [-1, 128, 26, 26]           2,304
-             ReLU-14          [-1, 128, 26, 26]               0
-      BatchNorm2d-15          [-1, 128, 26, 26]             256
-          Dropout-16          [-1, 128, 26, 26]               0
-           Conv2d-17           [-1, 64, 26, 26]           8,192
-             ReLU-18           [-1, 64, 26, 26]               0
-      BatchNorm2d-19           [-1, 64, 26, 26]             128
-          Dropout-20           [-1, 64, 26, 26]               0
-           Conv2d-21          [-1, 128, 26, 26]           2,304
-             ReLU-22          [-1, 128, 26, 26]               0
-      BatchNorm2d-23          [-1, 128, 26, 26]             256
-          Dropout-24          [-1, 128, 26, 26]               0
-           Conv2d-25           [-1, 64, 26, 26]           8,192
-             ReLU-26           [-1, 64, 26, 26]               0
-      BatchNorm2d-27           [-1, 64, 26, 26]             128
-          Dropout-28           [-1, 64, 26, 26]               0
-           Conv2d-29          [-1, 128, 26, 26]           2,304
-             ReLU-30          [-1, 128, 26, 26]               0
-      BatchNorm2d-31          [-1, 128, 26, 26]             256
-          Dropout-32          [-1, 128, 26, 26]               0
-           Conv2d-33           [-1, 64, 26, 26]           8,192
-             ReLU-34           [-1, 64, 26, 26]               0
-      BatchNorm2d-35           [-1, 64, 26, 26]             128
-          Dropout-36           [-1, 64, 26, 26]               0
-           Conv2d-37          [-1, 128, 26, 26]           2,304
-             ReLU-38          [-1, 128, 26, 26]               0
-      BatchNorm2d-39          [-1, 128, 26, 26]             256
-          Dropout-40          [-1, 128, 26, 26]               0
-           Conv2d-41           [-1, 64, 26, 26]           8,192
-             ReLU-42           [-1, 64, 26, 26]               0
-      BatchNorm2d-43           [-1, 64, 26, 26]             128
-          Dropout-44           [-1, 64, 26, 26]               0
-           Conv2d-45          [-1, 128, 26, 26]           2,304
-             ReLU-46          [-1, 128, 26, 26]               0
-      BatchNorm2d-47          [-1, 128, 26, 26]             256
-          Dropout-48          [-1, 128, 26, 26]               0
-           Conv2d-49           [-1, 64, 26, 26]           8,192
-             ReLU-50           [-1, 64, 26, 26]               0
-      BatchNorm2d-51           [-1, 64, 26, 26]             128
-          Dropout-52           [-1, 64, 26, 26]               0
-           Conv2d-53          [-1, 128, 26, 26]           2,304
-             ReLU-54          [-1, 128, 26, 26]               0
-      BatchNorm2d-55          [-1, 128, 26, 26]             256
-          Dropout-56          [-1, 128, 26, 26]               0
-           Conv2d-57           [-1, 64, 26, 26]           8,192
-             ReLU-58           [-1, 64, 26, 26]               0
-      BatchNorm2d-59           [-1, 64, 26, 26]             128
-          Dropout-60           [-1, 64, 26, 26]               0
-           Conv2d-61          [-1, 128, 26, 26]           2,304
-             ReLU-62          [-1, 128, 26, 26]               0
-      BatchNorm2d-63          [-1, 128, 26, 26]             256
-          Dropout-64          [-1, 128, 26, 26]               0
-           Conv2d-65           [-1, 64, 26, 26]           8,192
-             ReLU-66           [-1, 64, 26, 26]               0
-      BatchNorm2d-67           [-1, 64, 26, 26]             128
-          Dropout-68           [-1, 64, 26, 26]               0
-        AvgPool2d-69             [-1, 64, 1, 1]               0
-           Conv2d-70             [-1, 10, 1, 1]             640
-================================================================
-Total params: 89,536
-Trainable params: 89,536
-Non-trainable params: 0
-----------------------------------------------------------------
-Input size (MB): 0.01
-Forward/backward pass size (MB): 34.08
-Params size (MB): 0.34
-Estimated Total Size (MB): 34.43
-----------------------------------------------------------------
+   | Name           | Type               | Params
+-------------------------------------------------------
+0  | preplayer      | Sequential         | 1.9 K 
+1  | preplayer.0    | Conv2d             | 1.7 K 
+2  | preplayer.1    | BatchNorm2d        | 128   
+3  | preplayer.2    | ReLU               | 0     
+4  | preplayer.3    | Dropout            | 0     
+5  | conv1_layer1   | Sequential         | 74.0 K
+6  | conv1_layer1.0 | Conv2d             | 73.7 K
+7  | conv1_layer1.1 | MaxPool2d          | 0     
+8  | conv1_layer1.2 | BatchNorm2d        | 256   
+9  | conv1_layer1.3 | ReLU               | 0     
+10 | conv1_layer1.4 | Dropout            | 0     
+11 | resblock1      | Sequential         | 295 K 
+12 | resblock1.0    | Sequential         | 147 K 
+13 | resblock1.0.0  | Conv2d             | 147 K 
+14 | resblock1.0.1  | BatchNorm2d        | 256   
+15 | resblock1.0.2  | ReLU               | 0     
+16 | resblock1.0.3  | Dropout            | 0     
+17 | resblock1.1    | Sequential         | 147 K 
+18 | resblock1.1.0  | Conv2d             | 147 K 
+19 | resblock1.1.1  | BatchNorm2d        | 256   
+20 | resblock1.1.2  | ReLU               | 0     
+21 | resblock1.1.3  | Dropout            | 0     
+22 | conv2_layer2   | Sequential         | 295 K 
+23 | conv2_layer2.0 | Conv2d             | 294 K 
+24 | conv2_layer2.1 | MaxPool2d          | 0     
+25 | conv2_layer2.2 | BatchNorm2d        | 512   
+26 | conv2_layer2.3 | ReLU               | 0     
+27 | conv2_layer2.4 | Dropout            | 0     
+28 | conv3_layer3   | Sequential         | 1.2 M 
+29 | conv3_layer3.0 | Conv2d             | 1.2 M 
+30 | conv3_layer3.1 | MaxPool2d          | 0     
+31 | conv3_layer3.2 | BatchNorm2d        | 1.0 K 
+32 | conv3_layer3.3 | ReLU               | 0     
+33 | conv3_layer3.4 | Dropout            | 0     
+34 | resblock2      | Sequential         | 4.7 M 
+35 | resblock2.0    | Sequential         | 2.4 M 
+36 | resblock2.0.0  | Conv2d             | 2.4 M 
+37 | resblock2.0.1  | BatchNorm2d        | 1.0 K 
+38 | resblock2.0.2  | ReLU               | 0     
+39 | resblock2.0.3  | Dropout            | 0     
+40 | resblock2.1    | Sequential         | 2.4 M 
+41 | resblock2.1.0  | Conv2d             | 2.4 M 
+42 | resblock2.1.1  | BatchNorm2d        | 1.0 K 
+43 | resblock2.1.2  | ReLU               | 0     
+44 | resblock2.1.3  | Dropout            | 0     
+45 | maxpool        | MaxPool2d          | 0     
+46 | fc             | Linear             | 5.1 K 
+47 | model          | Sequential         | 6.6 M 
+48 | accuracy       | MulticlassAccuracy | 0     
+-------------------------------------------------------
+6.6 M     Trainable params
+0         Non-trainable params
+6.6 M     Total params
+26.292    Total estimated model params size (MB)
 ```
-Accuracy/Loss Graph
----IMAGE---
 
+## Accuracy/Loss Graph
+
+_Note_: This won;t be visible in .ipynb because it is an JavaScript object as now we have used the Tensorboard to plot them, please see image below for reference.
+
+![image](https://github.com/vmistry-repo/AI-Novice/assets/12965753/2dc045f3-e432-4c62-beb8-fba88ec29ce9)
+
+![image](https://github.com/vmistry-repo/AI-Novice/assets/12965753/c531af40-4c9f-43a9-8429-dc5e62d1997e)
 
 ## Analysis
 
-If we were not to use _Depthwise Separable Convolution_ we would not be able to achieve the target due to parameter violation.
-
-_Dialated Convolutions_ on the other hand helps to increase the spatial feature extraction, and increase the Receptive field rapidly.
-
-If we have resource constraint environment, _Depthwise Separable Convolution_ are very useful.
+Pytorch lightning allows to focus more on the Data Augmentation and Model Creation, and takes care of the Training and validation logic, which speeds up the development.
 
 ## Misclassified Images
 
 We have details of the failed validation test cases shown below. Following is the snapshot from the model training itself
 
----IMAGE---
+![image](https://github.com/vmistry-repo/AI-Novice/assets/12965753/5510b1ef-3a9c-4c1c-a3a9-c0790443745e)
+
+## HuggingFace Space 
+
+Link: https://huggingface.co/spaces/VMistry/S12
+
+You can play around with this app, which uses the same Model and its weights saved as part of this training.
+
+It does following
+- Upload and classify Images into classes (max upto: 10 as Cifar10 dataset)
+- See x number of Misclassified Images (Max: 50)
+- See x number of GradCAM Images (Max: 50)
+
+_Note_: These Max limits are set to get the outputs faster and play around with multiple options available
 
 ## Usage
 
